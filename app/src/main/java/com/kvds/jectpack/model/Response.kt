@@ -7,7 +7,7 @@ class Response<T> {
     var reason: String = ""
 
     @SerializedName("result")
-    var data: NewsData? = null
+    var data: T? = null
 
     @SerializedName("error_code")
     var errorCode: Int = 0

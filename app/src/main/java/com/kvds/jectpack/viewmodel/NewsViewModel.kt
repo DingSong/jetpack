@@ -16,7 +16,7 @@ class NewsViewModel @ViewModelInject constructor(
     private val repository: NewsRepository
 ) : ViewModel() {
 
-    private val _news = MutableLiveData<Response<List<News>>>()
+    private val _news = MutableLiveData<Response<NewsData>>()
     val news = _news
 
     private val _newsData = MutableLiveData<List<NewsData>>()
