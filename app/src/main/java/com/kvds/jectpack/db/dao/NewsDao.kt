@@ -8,9 +8,6 @@ import com.kvds.jectpack.model.NewsData
 interface NewsDao {
 
     // news
-    @Query("SELECT * FROM news WHERE id = :id")
-    fun getNewsById(id: Int): News
-
     @Query("SELECT * FROM news WHERE uniqueKey = :uniqueKey")
     fun getNewsByUniqueKey(uniqueKey: Int): News
 
