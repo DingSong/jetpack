@@ -35,6 +35,7 @@ class News(
 ) :
     IDiff<News> by delegate {
 
+    @PrimaryKey
     @SerializedName("uniquekey")
     var uniqueKey: String = ""
 
