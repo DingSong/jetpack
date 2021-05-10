@@ -13,7 +13,7 @@ import com.kvds.jectpack.adapter.diff.NewsDiffDelegate
 data class NewsData(
 
     @PrimaryKey(autoGenerate = true)
-    var id: Int,
+    val id: Int? = null,
 
     @ColumnInfo(name = "state")
     var stat: Int,
@@ -22,14 +22,12 @@ data class NewsData(
 
     var pageSize: Int,
 
-    var data: List<News>
-) {
-    override fun toString(): String {
-        return "NewsData(id=$id, stat=$stat, page=$page, pageSize=$pageSize, data=$data)"
-    }
-}
+    var data: MutableList<News>
+)
 
+@Entity(tableName = "news")
 class News(
+    @Ignore
     @Expose(
         serialize = false,
         deserialize = false
@@ -62,6 +60,11 @@ class News(
 
     @SerializedName("is_content")
     var isContent: Boolean = false
+
+    override fun toString(): String {
+        return "News(uniqueKey='$uniqueKey', title='$title', date='$date', category='$category', authorName='$authorName', url='$url', thumbnail01='$thumbnail01', thumbnail02='$thumbnail02', thumbnail03='$thumbnail03', isContent=$isContent)"
+    }
+
 }
 
 class NewsDataConverter {

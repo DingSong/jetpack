@@ -1,21 +1,39 @@
 package com.kvds.jectpack.db.dao
 
 import androidx.room.*
+import com.kvds.jectpack.model.News
 import com.kvds.jectpack.model.NewsData
 
 @Dao
 interface NewsDao {
 
-    @Query("SELECT * FROM newsData WHERE id = :id")
-    fun getNewsById(id: Int): NewsData
+    // news
+    @Query("SELECT * FROM news WHERE id = :id")
+    fun getNewsById(id: Int): News
 
-    @Query("SELECT * FROM newsData")
-    fun getNews(): List<NewsData>
+    @Query("SELECT * FROM news WHERE uniqueKey = :uniqueKey")
+    fun getNewsByUniqueKey(uniqueKey: Int): News
+
+    @Query("SELECT * FROM news")
+    fun getAllNews(): List<News>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addNews(vararg news: NewsData)
+    fun addNews(news: List<News>)
 
     @Delete
-    fun delete(news: NewsData)
+    fun delete(vararg news: News)
+
+    // newsData
+    @Query("SELECT * FROM newsData WHERE id = :id")
+    fun getNewsDataById(id: Int): NewsData
+
+    @Query("SELECT * FROM newsData")
+    fun getAllNewsData(): List<NewsData>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addNewsData(newsData: List<NewsData>)
+
+    @Delete
+    fun delete(vararg newsData: NewsData)
 
 }
