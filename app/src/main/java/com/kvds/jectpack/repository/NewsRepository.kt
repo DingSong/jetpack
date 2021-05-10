@@ -8,28 +8,31 @@ import com.kvds.jectpack.model.Response
 import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 import javax.inject.Named
 
-interface IRepository<T> {
-    suspend fun fetchNews(): T
-}
-
 @ActivityScoped
-class NewsRepository @Inject constructor(@Named(RepositoryModule.DISPATCHER_IO) private val dispatcher: CoroutineDispatcher) :
-    IRepository<Response<NewsData>> {
+class NewsRepository @Inject constructor(@Named(RepositoryModule.DISPATCHER_IO) private val dispatcher: CoroutineDispatcher) {
 
-    override suspend fun fetchNews(): Response<NewsData> {
-        return loadNewsFromNet()
+    suspend fun fetchNews(type: String, page: Int, pageSize: Int): Response<NewsData> {
+        return loadNewsFromNet(type, page, pageSize)
     }
 
-    private suspend fun loadNewsFromNet(): Response<NewsData> {
+    private suspend fun loadNewsFromNet(
+        type: String,
+        page: Int,
+        pageSize: Int
+    ): Response<NewsData> {
         return withContext(dispatcher) {
-            val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
+            HttpLoggingInterceptor()
+            val client = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor()).build()
+            val retrofit = Retrofit.Builder().baseUrl(BASE_URL).client(client)
                 .addConverterFactory(GsonConverterFactory.create()).build()
-            retrofit.create(ApiService::class.java).getNews()
+            retrofit.create(ApiService::class.java).getNews(type, page, pageSize)
         }
     }
 }

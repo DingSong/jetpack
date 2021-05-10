@@ -11,7 +11,9 @@ interface ApiService {
 
     @GET("/toutiao/index")
     suspend fun getNews(
-        @Query("type") type: String = "top",
+        @Query("type") type: String,
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int = 30,
         @Query("key") key: String = APP_KEY
     ): Response<NewsData>
 }
