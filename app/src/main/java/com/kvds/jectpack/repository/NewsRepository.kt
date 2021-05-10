@@ -28,8 +28,9 @@ class NewsRepository @Inject constructor(@Named(RepositoryModule.DISPATCHER_IO) 
         pageSize: Int
     ): Response<NewsData> {
         return withContext(dispatcher) {
-            HttpLoggingInterceptor()
-            val client = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor()).build()
+            val httpLoggingInterceptor = HttpLoggingInterceptor()
+            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            val client = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).build()
             val retrofit = Retrofit.Builder().baseUrl(BASE_URL).client(client)
                 .addConverterFactory(GsonConverterFactory.create()).build()
             retrofit.create(ApiService::class.java).getNews(type, page, pageSize)
