@@ -8,6 +8,7 @@ import com.kvds.jectpack.R
 import com.kvds.jectpack.adapter.NewsAdapter
 import com.kvds.jectpack.adapter.diff.diffUpdate
 import com.kvds.jectpack.model.News
+import com.kvds.jectpack.model.NewsType.Companion.TOP
 import com.kvds.jectpack.repository.NewsRepository
 import com.kvds.jectpack.viewmodel.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,23 +35,29 @@ class NewsActivity : AppCompatActivity() {
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(this)
 
+        var page = 1
+
         btn.setOnClickListener {
-            newsViewModel.fetchNews()
+            newsViewModel.fetchNews(TOP, page++)
+        }
+
+        refresher.setOnRefreshListener {
+            newsViewModel.fetchNews(TOP, 1)
         }
 
         newsViewModel.news.observe(this) {
-            val result = it.data?.data as? MutableList<News> ?: arrayListOf()
-            adapter.diffUpdate(adapter.data, result)
-            adapter.data = result
-            it.data?.apply {
-                newsViewModel.storeNews(this)
+            refresher.isRefreshing = false
+            adapter.diffUpdate(adapter.data, it)
+            adapter.data = it
+            if (it.isNotEmpty()) {
+                newsViewModel.storeNews(it)
             }
         }
 
         btn1.setOnClickListener {
             newsViewModel.loadNews()
         }
-        newsViewModel.newsData.observe(this) {
+        newsViewModel.newsRoom.observe(this) {
             it.forEach { item ->
                 println(item.toString())
             }

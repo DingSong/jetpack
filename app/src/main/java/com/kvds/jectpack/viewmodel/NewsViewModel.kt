@@ -9,6 +9,7 @@ import com.kvds.jectpack.model.News
 import com.kvds.jectpack.model.NewsData
 import com.kvds.jectpack.model.Response
 import com.kvds.jectpack.repository.NewsRepository
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -16,27 +17,29 @@ class NewsViewModel @ViewModelInject constructor(
     private val repository: NewsRepository
 ) : ViewModel() {
 
-    private val _news = MutableLiveData<Response<NewsData>>()
+    private val _news = MutableLiveData<MutableList<News>>()
     val news = _news
 
-    private val _newsData = MutableLiveData<List<NewsData>>()
-    val newsData = _newsData
+    private val _newsRoom = MutableLiveData<List<News>>()
+    val newsRoom = _newsRoom
 
-    fun fetchNews() {
-        viewModelScope.launch {
-            _news.value = repository.fetchNews()
+    fun fetchNews(type: String, page: Int, pageSize: Int = 30) {
+        viewModelScope.launch(CoroutineExceptionHandler { coroutineContext, throwable ->
+            println(throwable.message)
+        }) {
+            _news.value = repository.fetchNews(type, page, pageSize).data?.data ?: arrayListOf()
         }
     }
 
     fun loadNews() {
         viewModelScope.launch(Dispatchers.IO) {
-            _newsData.postValue(newsDatabase.newsDao().getNews())
+            _newsRoom.postValue(newsDatabase.newsDao().getAllNews())
         }
     }
 
-    fun storeNews(vararg news: NewsData) {
+    fun storeNews(news: List<News>) {
         viewModelScope.launch(Dispatchers.IO) {
-            newsDatabase.newsDao().addNews(*news)
+            newsDatabase.newsDao().addNews(news)
         }
     }
 
