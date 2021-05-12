@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("/toutiao/index")
-    suspend fun getNews(
+    suspend fun fetchNews(
         @Query("type") type: String,
         @Query("page") page: Int,
         @Query("page_size") pageSize: Int = 30,

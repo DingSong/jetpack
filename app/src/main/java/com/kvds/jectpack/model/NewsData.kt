@@ -28,12 +28,9 @@ data class NewsData(
 @Entity(tableName = "news")
 class News(
     @Ignore
-    @Expose(
-        serialize = false,
-        deserialize = false
-    ) private val delegate: IDiff<News> = NewsDiffDelegate()
-) :
-    IDiff<News> by delegate {
+    @Expose(serialize = false, deserialize = false)
+    private val delegate: IDiff<News> = NewsDiffDelegate()
+) : IDiff<News> by delegate {
 
     @PrimaryKey
     @SerializedName("uniquekey")
