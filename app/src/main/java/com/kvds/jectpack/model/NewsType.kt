@@ -1,5 +1,33 @@
 package com.kvds.jectpack.model
 
+import androidx.annotation.StringDef
+import com.kvds.jectpack.model.NewsType.Companion.CAR
+import com.kvds.jectpack.model.NewsType.Companion.ENTERTAINMENT
+import com.kvds.jectpack.model.NewsType.Companion.FASHION
+import com.kvds.jectpack.model.NewsType.Companion.FINANCE
+import com.kvds.jectpack.model.NewsType.Companion.GAME
+import com.kvds.jectpack.model.NewsType.Companion.HEALTH
+import com.kvds.jectpack.model.NewsType.Companion.INTERNATIONAL
+import com.kvds.jectpack.model.NewsType.Companion.MILITARY
+import com.kvds.jectpack.model.NewsType.Companion.NATIONAL
+import com.kvds.jectpack.model.NewsType.Companion.SPORT
+import com.kvds.jectpack.model.NewsType.Companion.TECHNOLOGY
+import com.kvds.jectpack.model.NewsType.Companion.TOP
+
+@StringDef(
+    TOP,
+    NATIONAL,
+    INTERNATIONAL,
+    ENTERTAINMENT,
+    SPORT,
+    MILITARY,
+    TECHNOLOGY,
+    FINANCE,
+    FASHION,
+    GAME,
+    CAR,
+    HEALTH
+)
 @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
 annotation class NewsType {
     companion object {
