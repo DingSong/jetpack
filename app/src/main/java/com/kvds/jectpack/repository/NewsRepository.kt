@@ -13,8 +13,6 @@ import com.kvds.jectpack.paging.NewsPagingSource
 import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named
@@ -39,7 +37,7 @@ class NewsRepository @Inject constructor(
         }
     }
 
-    fun fetchNewsWithPaging(@NewsType type: String, pageSize: Int): Flow<PagingData<News>> {
+    fun fetchNewsWithPaging3(@NewsType type: String, pageSize: Int): Flow<PagingData<News>> {
         return Pager(
             config = PagingConfig(pageSize),
             pagingSourceFactory = { NewsPagingSource(apiService, type) }

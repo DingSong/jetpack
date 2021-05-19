@@ -1,7 +1,6 @@
 package com.kvds.jectpack.ui
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -49,10 +48,10 @@ class NewsActivity : AppCompatActivity() {
                 }
                 is LoadState.Error -> {
                     refresher.isRefreshing = false
-                    Toast.makeText(
-                        this,
-                        (it.refresh as LoadState.Error).error.message,
-                        Toast.LENGTH_SHORT
+                    Snackbar.make(
+                        refresher,
+                        "error message : ${(it.refresh as LoadState.Error).error.message ?: ""}",
+                        Snackbar.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -62,7 +61,7 @@ class NewsActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             runCatching {
-                newsViewModel.fetchNewsWithPaging(NewsType.GAME, 30).collect {
+                newsViewModel.fetchNewsWithPaging3(NewsType.TOP).collect {
                     adapter.submitData(it)
                 }
             }.onSuccess {
